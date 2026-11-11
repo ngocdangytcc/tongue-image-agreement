@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: Tongue-image agreement with an expert panel — analysis code
+message: Please cite the paper rather than this repository.
+type: software
+authors:
+  - family-names: Tang
+    given-names: Huy Khanh
+    orcid: https://orcid.org/0000-0002-4521-7698
+  - family-names: Vo
+    given-names: Tuan Trong
+    orcid: https://orcid.org/0000-0002-4392-7311
+  - family-names: Tran
+    given-names: Dang Ngoc
+    orcid: https://orcid.org/0000-0002-5287-0265
+license: MIT

@@ -1,0 +1,2026 @@
+{
+ "about": "Public results file for: Tang HK, Vo TT, Tran DN. Agreement between a deep-learning reader of smartphone tongue photographs and a five-expert traditional-medicine panel. Diagnostics (submitted). No patient-level data, identifiers or photographs.",
+ "n_patients_evaluated": 1220,
+ "cohort": {
+  "patients_photographed": 1226,
+  "pilot_patients_excluded": 6,
+  "pilot_reason": "photographed on 17-18 December 2024 during a pilot of the photography protocol, before formal recruitment",
+  "patients_analysed": 1220,
+  "dorsal_photographs_analysed": 2440,
+  "capture_window_analysed": "4 January to 31 December 2025 (EXIF); 7 patients without an EXIF date",
+  "site": "University Medical Center Ho Chi Minh City, Vietnam",
+  "ethics": "Board of Ethics in Biomedical Research, University of Medicine and Pharmacy at Ho Chi Minh City, Decision No. 3911/ĐHYD-HĐĐĐ, 2 December 2024",
+  "training_note": "Models trained on all 1,226 patients under patient-grouped 5-fold CV; the six pilot patients are excluded from evaluation only. Their photographs were in the training folds of the other four folds."
+ },
+ "rating": {
+  "panel": "five traditional-medicine physicians, majority vote",
+  "experience": "mean 10.8 years (range 7 to 14)",
+  "standardisation_meeting_ict": "2025-01-06",
+  "modality": "Tongue signs rated from the tongue photographs; tongue movement rated from the tongue video. The model received only the two dorsal photographs."
+ },
+ "model": {
+  "backbone": "efficientnet_b0",
+  "pretrained_on": "ImageNet",
+  "img_size": 384,
+  "batch_size": 32,
+  "optimizer": "AdamW",
+  "lr": 0.0003,
+  "weight_decay": 0.0001,
+  "scheduler": "OneCycleLR, pct_start 0.25",
+  "mixed_precision": true,
+  "dropout": 0.2,
+  "n_heads": 15,
+  "seed": 20260915,
+  "cv": "patient-grouped 5-fold StratifiedGroupKFold, stratified on arm x EXIF capture month",
+  "primary_epochs": 6,
+  "robustness_epochs": 12,
+  "config_hash_primary": "5a2b7673b283",
+  "config_hash_robustness": "b1ba0615f548",
+  "aggregation": "the two dorsal photographs per patient are averaged before scoring",
+  "threshold_rule": "binary signs thresholded so predicted prevalence matches observed prevalence",
+  "runtime": "Google Colab Pro, NVIDIA L4",
+  "train_minutes_primary": 7,
+  "train_minutes_robustness": 12
+ },
+ "environment": {
+  "python": "3.13.15",
+  "torch": "2.11.0+cu128",
+  "timm": "1.0.29",
+  "scikit_learn": "1.6.1",
+  "numpy": "2.1.3",
+  "pandas": "2.2.3"
+ },
+ "bootstrap": {
+  "n_resamples": 1000,
+  "unit": "patient",
+  "seed": 20260915,
+  "note": "binary thresholds held fixed at the full-sample value across resamples"
+ },
+ "cross_validation": {
+  "splitter": "sklearn StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=20260915)",
+  "grouping_unit": "Patient_ID",
+  "stratified_on": "arm x EXIF capture month, strata below 2*n_folds collapsed to 'rare'"
+ },
+ "negative_controls": {
+  "signs": [
+   "Tongue_Movement",
+   "Tongue_Sublingual_Veins"
+  ],
+  "prespecified": true,
+  "rationale": "Tongue movement is motion (rated from video) and sublingual veins lie on the underside; neither is visible in a dorsal still photograph.",
+  "kappa": {
+   "Tongue_Movement": 0.0105,
+   "Tongue_Sublingual_Veins": 0.1294
+  },
+  "kappa_ci": {
+   "Tongue_Movement": [
+    -0.017,
+    0.039
+   ],
+   "Tongue_Sublingual_Veins": [
+    0.069,
+    0.184
+   ]
+  },
+  "ac1": {
+   "Tongue_Movement": 0.6393,
+   "Tongue_Sublingual_Veins": 0.1859
+  },
+  "coefficient_comparison_status": "post hoc: using the controls to compare kappa and AC1 was decided after kappa was known"
+ },
+ "per_sign_primary_6ep": {
+  "Tongue_Color": {
+   "n": 1220,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 4,
+   "majority_baseline": 0.4262,
+   "accuracy": 0.5434,
+   "macro_f1": 0.4924,
+   "confusion_matrix": {
+    "labels": [
+     "Pale",
+     "Pale_red",
+     "Red",
+     "Bluish_purple"
+    ],
+    "rows_panel_cols_model": [
+     [
+      99,
+      115,
+      31,
+      13
+     ],
+     [
+      53,
+      331,
+      102,
+      34
+     ],
+     [
+      9,
+      71,
+      191,
+      18
+     ],
+     [
+      9,
+      51,
+      51,
+      42
+     ]
+    ]
+   },
+   "kappa": 0.3367,
+   "auc": 0.7637,
+   "ac1": 0.4084,
+   "percent_agreement": 54.3,
+   "kappa_linear_weighted": 0.3763,
+   "kappa_ci": [
+    0.297,
+    0.378
+   ],
+   "auc_ci": [
+    0.745,
+    0.784
+   ],
+   "ac1_ci": [
+    0.373,
+    0.447
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Tongue_Shape": {
+   "n": 1220,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 3,
+   "majority_baseline": 0.5279,
+   "accuracy": 0.6164,
+   "macro_f1": 0.5736,
+   "confusion_matrix": {
+    "labels": [
+     "Thin",
+     "Normal",
+     "Enlarged"
+    ],
+    "rows_panel_cols_model": [
+     [
+      95,
+      97,
+      15
+     ],
+     [
+      91,
+      468,
+      85
+     ],
+     [
+      16,
+      164,
+      189
+     ]
+    ]
+   },
+   "kappa": 0.3441,
+   "auc": 0.7804,
+   "ac1": 0.4587,
+   "percent_agreement": 61.6,
+   "kappa_linear_weighted": 0.3941,
+   "kappa_ci": [
+    0.298,
+    0.391
+   ],
+   "auc_ci": [
+    0.759,
+    0.801
+   ],
+   "ac1_ci": [
+    0.421,
+    0.5
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Tongue_Moisture": {
+   "n": 1220,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 3,
+   "majority_baseline": 0.65,
+   "accuracy": 0.6762,
+   "macro_f1": 0.5141,
+   "confusion_matrix": {
+    "labels": [
+     "Dry",
+     "Moist",
+     "Wet"
+    ],
+    "rows_panel_cols_model": [
+     [
+      34,
+      123,
+      2
+     ],
+     [
+      38,
+      686,
+      69
+     ],
+     [
+      3,
+      160,
+      105
+     ]
+    ]
+   },
+   "kappa": 0.2708,
+   "auc": 0.7611,
+   "ac1": 0.5859,
+   "percent_agreement": 67.6,
+   "kappa_linear_weighted": 0.3117,
+   "kappa_ci": [
+    0.219,
+    0.322
+   ],
+   "auc_ci": [
+    0.734,
+    0.786
+   ],
+   "ac1_ci": [
+    0.552,
+    0.62
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Coating_Color": {
+   "n": 1192,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 4,
+   "majority_baseline": 0.5629,
+   "accuracy": 0.6401,
+   "macro_f1": 0.41,
+   "confusion_matrix": {
+    "labels": [
+     "White",
+     "White_yellow",
+     "Yellow",
+     "Grayish_black"
+    ],
+    "rows_panel_cols_model": [
+     [
+      586,
+      80,
+      5,
+      0
+     ],
+     [
+      173,
+      135,
+      29,
+      1
+     ],
+     [
+      33,
+      44,
+      42,
+      0
+     ],
+     [
+      49,
+      10,
+      5,
+      0
+     ]
+    ]
+   },
+   "kappa": 0.3235,
+   "auc": 0.7469,
+   "ac1": 0.5637,
+   "percent_agreement": 64.0,
+   "kappa_linear_weighted": 0.3378,
+   "kappa_ci": [
+    0.278,
+    0.367
+   ],
+   "auc_ci": [
+    0.723,
+    0.772
+   ],
+   "ac1_ci": [
+    0.529,
+    0.598
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Coating_Thickness": {
+   "n": 1193,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 2,
+   "majority_baseline": 0.6169,
+   "accuracy": 0.777,
+   "macro_f1": 0.7672,
+   "confusion_matrix": {
+    "labels": [
+     "Thin",
+     "Thick"
+    ],
+    "rows_panel_cols_model": [
+     [
+      341,
+      116
+     ],
+     [
+      150,
+      586
+     ]
+    ]
+   },
+   "kappa": 0.5348,
+   "auc": 0.8614,
+   "ac1": 0.5721,
+   "percent_agreement": 77.7,
+   "sensitivity_thick": 0.7962,
+   "specificity_thick": 0.7462,
+   "kappa_ci": [
+    0.489,
+    0.583
+   ],
+   "auc_ci": [
+    0.842,
+    0.882
+   ],
+   "ac1_ci": [
+    0.526,
+    0.619
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_thick_ci": [
+    0.768,
+    0.823
+   ],
+   "specificity_thick_ci": [
+    0.706,
+    0.784
+   ],
+   "thick_positive_class_note": "sensitivity/specificity with 'Thick' as the positive class; same bootstrap stream as kappa"
+  },
+  "Tongue_Movement": {
+   "n": 1217,
+   "kind": "multiclass",
+   "negative_control": true,
+   "n_classes": 4,
+   "majority_baseline": 0.691,
+   "accuracy": 0.6754,
+   "macro_f1": 0.2256,
+   "confusion_matrix": {
+    "labels": [
+     "Flexible",
+     "Trembling",
+     "Flaccid",
+     "Stiff"
+    ],
+    "rows_panel_cols_model": [
+     [
+      812,
+      23,
+      6,
+      0
+     ],
+     [
+      212,
+      7,
+      2,
+      0
+     ],
+     [
+      130,
+      2,
+      3,
+      0
+     ],
+     [
+      19,
+      1,
+      0,
+      0
+     ]
+    ]
+   },
+   "kappa": 0.0105,
+   "auc": 0.5712,
+   "ac1": 0.6393,
+   "percent_agreement": 67.5,
+   "kappa_linear_weighted": 0.0104,
+   "kappa_ci": [
+    -0.017,
+    0.039
+   ],
+   "auc_ci": [
+    0.526,
+    0.612
+   ],
+   "ac1_ci": [
+    0.607,
+    0.674
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Tongue_Swollen": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.4172,
+   "n_positive": 509,
+   "sensitivity": 0.7073,
+   "specificity": 0.7904,
+   "two_by_two": {
+    "tp": 360,
+    "fp": 149,
+    "fn": 149,
+    "tn": 562
+   },
+   "kappa": 0.4977,
+   "auc": 0.8243,
+   "ac1": 0.5245,
+   "percent_agreement": 75.6,
+   "kappa_ci": [
+    0.45,
+    0.545
+   ],
+   "auc_ci": [
+    0.801,
+    0.847
+   ],
+   "ac1_ci": [
+    0.477,
+    0.571
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.669,
+    0.743
+   ],
+   "specificity_ci": [
+    0.762,
+    0.822
+   ]
+  },
+  "Coating_Peeled": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.0328,
+   "n_positive": 40,
+   "sensitivity": 0.125,
+   "specificity": 0.9703,
+   "two_by_two": {
+    "tp": 5,
+    "fp": 35,
+    "fn": 35,
+    "tn": 1145
+   },
+   "kappa": 0.0953,
+   "auc": 0.7114,
+   "ac1": 0.9387,
+   "percent_agreement": 94.3,
+   "kappa_ci": [
+    -0.002,
+    0.202
+   ],
+   "auc_ci": [
+    0.618,
+    0.795
+   ],
+   "ac1_ci": [
+    0.923,
+    0.952
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.028,
+    0.237
+   ],
+   "specificity_ci": [
+    0.962,
+    0.979
+   ]
+  },
+  "Coating_Rotten": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.1098,
+   "n_positive": 134,
+   "sensitivity": 0.3209,
+   "specificity": 0.9162,
+   "two_by_two": {
+    "tp": 43,
+    "fp": 91,
+    "fn": 91,
+    "tn": 995
+   },
+   "kappa": 0.2371,
+   "auc": 0.7735,
+   "ac1": 0.8146,
+   "percent_agreement": 85.1,
+   "kappa_ci": [
+    0.157,
+    0.315
+   ],
+   "auc_ci": [
+    0.733,
+    0.808
+   ],
+   "ac1_ci": [
+    0.786,
+    0.842
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.244,
+    0.4
+   ],
+   "specificity_ci": [
+    0.899,
+    0.932
+   ]
+  },
+  "Coating_Greasy": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.3951,
+   "n_positive": 482,
+   "sensitivity": 0.5519,
+   "specificity": 0.7073,
+   "two_by_two": {
+    "tp": 266,
+    "fp": 216,
+    "fn": 216,
+    "tn": 522
+   },
+   "kappa": 0.2592,
+   "auc": 0.6787,
+   "ac1": 0.3217,
+   "percent_agreement": 64.6,
+   "kappa_ci": [
+    0.203,
+    0.314
+   ],
+   "auc_ci": [
+    0.648,
+    0.709
+   ],
+   "ac1_ci": [
+    0.267,
+    0.374
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.506,
+    0.597
+   ],
+   "specificity_ci": [
+    0.675,
+    0.737
+   ]
+  },
+  "Tongue_Scalloped": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.6697,
+   "n_positive": 817,
+   "sensitivity": 0.7956,
+   "specificity": 0.5856,
+   "two_by_two": {
+    "tp": 650,
+    "fp": 167,
+    "fn": 167,
+    "tn": 236
+   },
+   "kappa": 0.3812,
+   "auc": 0.7929,
+   "ac1": 0.509,
+   "percent_agreement": 72.6,
+   "kappa_ci": [
+    0.325,
+    0.436
+   ],
+   "auc_ci": [
+    0.767,
+    0.819
+   ],
+   "ac1_ci": [
+    0.457,
+    0.561
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.768,
+    0.824
+   ],
+   "specificity_ci": [
+    0.536,
+    0.632
+   ]
+  },
+  "Tongue_Cracked": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.4959,
+   "n_positive": 605,
+   "sensitivity": 0.8198,
+   "specificity": 0.8228,
+   "two_by_two": {
+    "tp": 496,
+    "fp": 109,
+    "fn": 109,
+    "tn": 506
+   },
+   "kappa": 0.6426,
+   "auc": 0.9015,
+   "ac1": 0.6426,
+   "percent_agreement": 82.1,
+   "kappa_ci": [
+    0.602,
+    0.685
+   ],
+   "auc_ci": [
+    0.885,
+    0.919
+   ],
+   "ac1_ci": [
+    0.602,
+    0.686
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.789,
+    0.85
+   ],
+   "specificity_ci": [
+    0.794,
+    0.852
+   ]
+  },
+  "Tongue_Prickly": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.1705,
+   "n_positive": 208,
+   "sensitivity": 0.2885,
+   "specificity": 0.8538,
+   "two_by_two": {
+    "tp": 60,
+    "fp": 148,
+    "fn": 148,
+    "tn": 864
+   },
+   "kappa": 0.1422,
+   "auc": 0.63,
+   "ac1": 0.6617,
+   "percent_agreement": 75.7,
+   "kappa_ci": [
+    0.083,
+    0.208
+   ],
+   "auc_ci": [
+    0.59,
+    0.673
+   ],
+   "ac1_ci": [
+    0.624,
+    0.702
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.228,
+    0.351
+   ],
+   "specificity_ci": [
+    0.834,
+    0.876
+   ]
+  },
+  "Tongue_Stasis_Spots": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.141,
+   "n_positive": 172,
+   "sensitivity": 0.3779,
+   "specificity": 0.8979,
+   "two_by_two": {
+    "tp": 65,
+    "fp": 107,
+    "fn": 107,
+    "tn": 941
+   },
+   "kappa": 0.2758,
+   "auc": 0.7713,
+   "ac1": 0.7685,
+   "percent_agreement": 82.5,
+   "kappa_ci": [
+    0.194,
+    0.345
+   ],
+   "auc_ci": [
+    0.731,
+    0.807
+   ],
+   "ac1_ci": [
+    0.734,
+    0.8
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.301,
+    0.448
+   ],
+   "specificity_ci": [
+    0.878,
+    0.915
+   ]
+  },
+  "Tongue_Sublingual_Veins": {
+   "n": 1217,
+   "kind": "binary",
+   "negative_control": true,
+   "prevalence": 0.4084,
+   "n_positive": 497,
+   "sensitivity": 0.4849,
+   "specificity": 0.6444,
+   "two_by_two": {
+    "tp": 241,
+    "fp": 256,
+    "fn": 256,
+    "tn": 464
+   },
+   "kappa": 0.1294,
+   "auc": 0.5953,
+   "ac1": 0.1859,
+   "percent_agreement": 57.9,
+   "kappa_ci": [
+    0.069,
+    0.184
+   ],
+   "auc_ci": [
+    0.565,
+    0.627
+   ],
+   "ac1_ci": [
+    0.127,
+    0.244
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.441,
+    0.53
+   ],
+   "specificity_ci": [
+    0.608,
+    0.68
+   ]
+  }
+ },
+ "per_sign_robustness_12ep": {
+  "Tongue_Color": {
+   "n": 1220,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 4,
+   "majority_baseline": 0.4262,
+   "accuracy": 0.5156,
+   "macro_f1": 0.4562,
+   "confusion_matrix": {
+    "labels": [
+     "Pale",
+     "Pale_red",
+     "Red",
+     "Bluish_purple"
+    ],
+    "rows_panel_cols_model": [
+     [
+      104,
+      115,
+      21,
+      18
+     ],
+     [
+      69,
+      333,
+      88,
+      30
+     ],
+     [
+      18,
+      90,
+      160,
+      21
+     ],
+     [
+      13,
+      56,
+      52,
+      32
+     ]
+    ]
+   },
+   "kappa": 0.2922,
+   "auc": 0.7437,
+   "ac1": 0.3729,
+   "percent_agreement": 51.6,
+   "kappa_linear_weighted": 0.3308,
+   "kappa_ci": [
+    0.25,
+    0.332
+   ],
+   "auc_ci": [
+    0.724,
+    0.763
+   ],
+   "ac1_ci": [
+    0.335,
+    0.407
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Tongue_Shape": {
+   "n": 1220,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 3,
+   "majority_baseline": 0.5279,
+   "accuracy": 0.5943,
+   "macro_f1": 0.5361,
+   "confusion_matrix": {
+    "labels": [
+     "Thin",
+     "Normal",
+     "Enlarged"
+    ],
+    "rows_panel_cols_model": [
+     [
+      75,
+      112,
+      20
+     ],
+     [
+      88,
+      468,
+      88
+     ],
+     [
+      23,
+      164,
+      182
+     ]
+    ]
+   },
+   "kappa": 0.3008,
+   "auc": 0.7636,
+   "ac1": 0.4295,
+   "percent_agreement": 59.4,
+   "kappa_linear_weighted": 0.3386,
+   "kappa_ci": [
+    0.258,
+    0.348
+   ],
+   "auc_ci": [
+    0.741,
+    0.785
+   ],
+   "ac1_ci": [
+    0.392,
+    0.471
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Tongue_Moisture": {
+   "n": 1220,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 3,
+   "majority_baseline": 0.65,
+   "accuracy": 0.6779,
+   "macro_f1": 0.5323,
+   "confusion_matrix": {
+    "labels": [
+     "Dry",
+     "Moist",
+     "Wet"
+    ],
+    "rows_panel_cols_model": [
+     [
+      47,
+      105,
+      7
+     ],
+     [
+      44,
+      681,
+      68
+     ],
+     [
+      6,
+      163,
+      99
+     ]
+    ]
+   },
+   "kappa": 0.2884,
+   "auc": 0.733,
+   "ac1": 0.5853,
+   "percent_agreement": 67.8,
+   "kappa_linear_weighted": 0.3191,
+   "kappa_ci": [
+    0.232,
+    0.343
+   ],
+   "auc_ci": [
+    0.707,
+    0.759
+   ],
+   "ac1_ci": [
+    0.549,
+    0.622
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Coating_Color": {
+   "n": 1192,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 4,
+   "majority_baseline": 0.5629,
+   "accuracy": 0.6183,
+   "macro_f1": 0.4212,
+   "confusion_matrix": {
+    "labels": [
+     "White",
+     "White_yellow",
+     "Yellow",
+     "Grayish_black"
+    ],
+    "rows_panel_cols_model": [
+     [
+      551,
+      103,
+      10,
+      7
+     ],
+     [
+      164,
+      139,
+      30,
+      5
+     ],
+     [
+      31,
+      43,
+      44,
+      1
+     ],
+     [
+      44,
+      8,
+      9,
+      3
+     ]
+    ]
+   },
+   "kappa": 0.3044,
+   "auc": 0.7318,
+   "ac1": 0.5335,
+   "percent_agreement": 61.8,
+   "kappa_linear_weighted": 0.3274,
+   "kappa_ci": [
+    0.261,
+    0.348
+   ],
+   "auc_ci": [
+    0.706,
+    0.757
+   ],
+   "ac1_ci": [
+    0.499,
+    0.569
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Coating_Thickness": {
+   "n": 1193,
+   "kind": "multiclass",
+   "negative_control": false,
+   "n_classes": 2,
+   "majority_baseline": 0.6169,
+   "accuracy": 0.7787,
+   "macro_f1": 0.7667,
+   "confusion_matrix": {
+    "labels": [
+     "Thin",
+     "Thick"
+    ],
+    "rows_panel_cols_model": [
+     [
+      329,
+      128
+     ],
+     [
+      136,
+      600
+     ]
+    ]
+   },
+   "kappa": 0.5334,
+   "auc": 0.8511,
+   "ac1": 0.5791,
+   "percent_agreement": 77.9,
+   "sensitivity_thick": 0.8152,
+   "specificity_thick": 0.7199,
+   "kappa_ci": [
+    0.485,
+    0.578
+   ],
+   "auc_ci": [
+    0.83,
+    0.871
+   ],
+   "ac1_ci": [
+    0.534,
+    0.624
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Tongue_Movement": {
+   "n": 1217,
+   "kind": "multiclass",
+   "negative_control": true,
+   "n_classes": 4,
+   "majority_baseline": 0.691,
+   "accuracy": 0.6286,
+   "macro_f1": 0.2623,
+   "confusion_matrix": {
+    "labels": [
+     "Flexible",
+     "Trembling",
+     "Flaccid",
+     "Stiff"
+    ],
+    "rows_panel_cols_model": [
+     [
+      727,
+      77,
+      37,
+      0
+     ],
+     [
+      180,
+      26,
+      15,
+      0
+     ],
+     [
+      112,
+      11,
+      12,
+      0
+     ],
+     [
+      19,
+      1,
+      0,
+      0
+     ]
+    ]
+   },
+   "kappa": 0.0418,
+   "auc": 0.5643,
+   "ac1": 0.575,
+   "percent_agreement": 62.9,
+   "kappa_linear_weighted": 0.0406,
+   "kappa_ci": [
+    0.001,
+    0.083
+   ],
+   "auc_ci": [
+    0.524,
+    0.603
+   ],
+   "ac1_ci": [
+    0.543,
+    0.609
+   ],
+   "n_valid_resamples": 1000
+  },
+  "Tongue_Swollen": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.4172,
+   "n_positive": 509,
+   "sensitivity": 0.6955,
+   "specificity": 0.782,
+   "two_by_two": {
+    "tp": 354,
+    "fp": 155,
+    "fn": 155,
+    "tn": 556
+   },
+   "kappa": 0.4775,
+   "auc": 0.815,
+   "ac1": 0.5054,
+   "percent_agreement": 74.6,
+   "kappa_ci": [
+    0.424,
+    0.527
+   ],
+   "auc_ci": [
+    0.79,
+    0.839
+   ],
+   "ac1_ci": [
+    0.455,
+    0.555
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.652,
+    0.737
+   ],
+   "specificity_ci": [
+    0.751,
+    0.812
+   ]
+  },
+  "Coating_Peeled": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.0328,
+   "n_positive": 40,
+   "sensitivity": 0.2,
+   "specificity": 0.9729,
+   "two_by_two": {
+    "tp": 8,
+    "fp": 32,
+    "fn": 32,
+    "tn": 1148
+   },
+   "kappa": 0.1729,
+   "auc": 0.7327,
+   "ac1": 0.944,
+   "percent_agreement": 94.8,
+   "kappa_ci": [
+    0.055,
+    0.289
+   ],
+   "auc_ci": [
+    0.65,
+    0.811
+   ],
+   "ac1_ci": [
+    0.93,
+    0.957
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.079,
+    0.324
+   ],
+   "specificity_ci": [
+    0.963,
+    0.981
+   ]
+  },
+  "Coating_Rotten": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.1098,
+   "n_positive": 134,
+   "sensitivity": 0.2985,
+   "specificity": 0.9134,
+   "two_by_two": {
+    "tp": 40,
+    "fp": 94,
+    "fn": 94,
+    "tn": 992
+   },
+   "kappa": 0.212,
+   "auc": 0.7483,
+   "ac1": 0.8084,
+   "percent_agreement": 84.6,
+   "kappa_ci": [
+    0.133,
+    0.283
+   ],
+   "auc_ci": [
+    0.7,
+    0.789
+   ],
+   "ac1_ci": [
+    0.78,
+    0.835
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.221,
+    0.372
+   ],
+   "specificity_ci": [
+    0.896,
+    0.93
+   ]
+  },
+  "Coating_Greasy": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.3951,
+   "n_positive": 482,
+   "sensitivity": 0.5083,
+   "specificity": 0.6789,
+   "two_by_two": {
+    "tp": 245,
+    "fp": 237,
+    "fn": 237,
+    "tn": 501
+   },
+   "kappa": 0.1872,
+   "auc": 0.6306,
+   "ac1": 0.2557,
+   "percent_agreement": 61.1,
+   "kappa_ci": [
+    0.131,
+    0.243
+   ],
+   "auc_ci": [
+    0.6,
+    0.662
+   ],
+   "ac1_ci": [
+    0.201,
+    0.311
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.465,
+    0.554
+   ],
+   "specificity_ci": [
+    0.646,
+    0.713
+   ]
+  },
+  "Tongue_Scalloped": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.6697,
+   "n_positive": 817,
+   "sensitivity": 0.8029,
+   "specificity": 0.6005,
+   "two_by_two": {
+    "tp": 656,
+    "fp": 161,
+    "fn": 161,
+    "tn": 242
+   },
+   "kappa": 0.4034,
+   "auc": 0.7786,
+   "ac1": 0.5266,
+   "percent_agreement": 73.6,
+   "kappa_ci": [
+    0.351,
+    0.463
+   ],
+   "auc_ci": [
+    0.752,
+    0.807
+   ],
+   "ac1_ci": [
+    0.476,
+    0.58
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.774,
+    0.83
+   ],
+   "specificity_ci": [
+    0.55,
+    0.65
+   ]
+  },
+  "Tongue_Cracked": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.4959,
+   "n_positive": 605,
+   "sensitivity": 0.8298,
+   "specificity": 0.8325,
+   "two_by_two": {
+    "tp": 502,
+    "fp": 103,
+    "fn": 103,
+    "tn": 512
+   },
+   "kappa": 0.6623,
+   "auc": 0.8999,
+   "ac1": 0.6623,
+   "percent_agreement": 83.1,
+   "kappa_ci": [
+    0.621,
+    0.705
+   ],
+   "auc_ci": [
+    0.883,
+    0.916
+   ],
+   "ac1_ci": [
+    0.621,
+    0.705
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.801,
+    0.859
+   ],
+   "specificity_ci": [
+    0.804,
+    0.864
+   ]
+  },
+  "Tongue_Prickly": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.1705,
+   "n_positive": 208,
+   "sensitivity": 0.2933,
+   "specificity": 0.8547,
+   "two_by_two": {
+    "tp": 61,
+    "fp": 147,
+    "fn": 147,
+    "tn": 865
+   },
+   "kappa": 0.148,
+   "auc": 0.6259,
+   "ac1": 0.664,
+   "percent_agreement": 75.9,
+   "kappa_ci": [
+    0.083,
+    0.213
+   ],
+   "auc_ci": [
+    0.586,
+    0.667
+   ],
+   "ac1_ci": [
+    0.622,
+    0.706
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.232,
+    0.354
+   ],
+   "specificity_ci": [
+    0.833,
+    0.877
+   ]
+  },
+  "Tongue_Stasis_Spots": {
+   "n": 1220,
+   "kind": "binary",
+   "negative_control": false,
+   "prevalence": 0.141,
+   "n_positive": 172,
+   "sensitivity": 0.3953,
+   "specificity": 0.9008,
+   "two_by_two": {
+    "tp": 68,
+    "fp": 104,
+    "fn": 104,
+    "tn": 944
+   },
+   "kappa": 0.2961,
+   "auc": 0.7801,
+   "ac1": 0.775,
+   "percent_agreement": 83.0,
+   "kappa_ci": [
+    0.224,
+    0.371
+   ],
+   "auc_ci": [
+    0.741,
+    0.816
+   ],
+   "ac1_ci": [
+    0.741,
+    0.805
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.323,
+    0.466
+   ],
+   "specificity_ci": [
+    0.883,
+    0.919
+   ]
+  },
+  "Tongue_Sublingual_Veins": {
+   "n": 1217,
+   "kind": "binary",
+   "negative_control": true,
+   "prevalence": 0.4084,
+   "n_positive": 497,
+   "sensitivity": 0.4487,
+   "specificity": 0.6194,
+   "two_by_two": {
+    "tp": 223,
+    "fp": 274,
+    "fn": 274,
+    "tn": 446
+   },
+   "kappa": 0.0681,
+   "auc": 0.5603,
+   "ac1": 0.1287,
+   "percent_agreement": 55.0,
+   "kappa_ci": [
+    0.015,
+    0.126
+   ],
+   "auc_ci": [
+    0.529,
+    0.593
+   ],
+   "ac1_ci": [
+    0.073,
+    0.185
+   ],
+   "n_valid_resamples": 1000,
+   "sensitivity_ci": [
+    0.405,
+    0.491
+   ],
+   "specificity_ci": [
+    0.585,
+    0.651
+   ]
+  }
+ },
+ "summary": {
+  "n_readable_signs": 13,
+  "n_negative_controls": 2,
+  "median_kappa_readable_6ep": 0.3235,
+  "median_ac1_readable_6ep": 0.5721,
+  "median_kappa_readable_12ep": 0.2961,
+  "median_ac1_readable_12ep": 0.5791,
+  "epoch_choice": "6 epochs chosen after both runs were seen; 12 epochs reported as sensitivity analysis"
+ },
+ "panel_reliability": {
+  "source": "Tang HK, Ly CVM, Tran DN, Nguyen DTH. Assessment of agreement among traditional medicine experts in tongue diagnosis in patients with atrophic gastritis. Vietnam J Community Med 2025;66. doi:10.52163/yhc.v66iCD15.3290 (Crossref: published online 24 Oct 2025; in Vietnamese; manuscript reference 21).",
+  "design": "Separate panel-reliability study: 120 patients, Sony ILCE-6000 24 MP camera, 10 tongue features, November 2024 to June 2025, ethics approval 2841/HDDD-DHYD of 7 October 2024. It established and standardised the five-expert panel that produced the reference standard for the present cohort.",
+  "panel": {
+   "n": 5,
+   "men": 3,
+   "women": 2,
+   "qualifications": "1 physician, 1 specialist level I, 1 Master, 2 doctorates",
+   "mean_experience_years": 10.8,
+   "experience_range_years": [
+    7,
+    14
+   ],
+   "affiliation": "Faculty of Traditional Medicine, University of Medicine and Pharmacy at Ho Chi Minh City"
+  },
+  "standardisation_meeting_ict": "2025-01-06",
+  "blinding": "Panel read independently, blinded to endoscopy and other clinical data; endoscopists blinded to tongue findings.",
+  "duplicate_reading": "Cases coded and randomly ordered into two datasets, read twice one week apart.",
+  "intra_rater_kappa": {
+   "range": [
+    0.7,
+    0.84
+   ],
+   "values": [
+    0.84,
+    0.81,
+    0.73,
+    0.72,
+    0.7
+   ]
+  },
+  "inter_rater_fleiss": {
+   "round1": 0.47,
+   "round1_sd": 0.1,
+   "round2": 0.44,
+   "round2_sd": 0.13,
+   "mean": 0.46,
+   "observed_agreement": [
+    0.73,
+    0.72
+   ]
+  },
+  "per_feature_fleiss_mean": {
+   "Tongue_Cracked": 0.67,
+   "surface_features": 0.57,
+   "Tongue_Scalloped": 0.52,
+   "Tongue_Moisture": 0.48,
+   "Coating_Color": 0.47,
+   "Tongue_Color": 0.46,
+   "Tongue_Shape": 0.4,
+   "Coating_Thickness": 0.39,
+   "Tongue_Stasis_Spots": 0.31,
+   "Tongue_Prickly": 0.29
+  }
+ },
+ "panel_vs_model_correlation": {
+  "n_signs": 9,
+  "signs": [
+   "Tongue_Cracked",
+   "Tongue_Scalloped",
+   "Tongue_Moisture",
+   "Coating_Color",
+   "Tongue_Color",
+   "Tongue_Shape",
+   "Coating_Thickness",
+   "Tongue_Stasis_Spots",
+   "Tongue_Prickly"
+  ],
+  "pearson_r": 0.713,
+  "pearson_p": 0.031,
+  "pearson_ci_fisher_z": [
+   0.093,
+   0.935
+  ],
+  "pearson_ci_bootstrap_over_signs": [
+   -0.261,
+   0.969
+  ],
+  "spearman_rho": 0.5,
+  "spearman_p": 0.17,
+  "leave_one_out_coating_thickness": {
+   "pearson_r": 0.892,
+   "pearson_p": 0.003
+  }
+ },
+ "human_benchmark": {
+  "source": "Jacobson E et al., J Altern Complement Med 2019;25(11):1085-96",
+  "pmid": "31730402",
+  "doi": "10.1089/acm.2019.0197",
+  "design": "systematic review of 21 studies; Cohen's kappa reported in 7 (mean 0.34, median 0.34, range 0.07 to 0.59); 14 of 21 assessed TCM diagnoses and 2 assessed diagnostic signs; raters examined subjects in person (PubMed abstract, PMID 31730402, checked 11 Nov 2026)",
+  "median_kappa": 0.34,
+  "range": [
+   0.07,
+   0.59
+  ]
+ },
+ "duplicate_photograph_sensitivity": {
+  "records_excluded": 4,
+  "patients_evaluated": 1216,
+  "pairs_in_different_folds": 1,
+  "kappa": {
+   "Tongue_Color": 0.3354,
+   "Tongue_Shape": 0.3441,
+   "Tongue_Moisture": 0.2712,
+   "Coating_Color": 0.3247,
+   "Coating_Thickness": 0.5357,
+   "Tongue_Movement": 0.0105,
+   "Tongue_Swollen": 0.4993,
+   "Coating_Peeled": 0.0952,
+   "Coating_Rotten": 0.2402,
+   "Coating_Greasy": 0.2576,
+   "Tongue_Scalloped": 0.3794,
+   "Tongue_Cracked": 0.6414,
+   "Tongue_Prickly": 0.1416,
+   "Tongue_Stasis_Spots": 0.2754,
+   "Tongue_Sublingual_Veins": 0.1274
+  },
+  "median_kappa_readable": 0.3247,
+  "max_abs_change_vs_primary": 0.0031
+ },
+ "table1_cohort": {
+  "n_patients": 1220,
+  "continuous": {
+   "Dem_Age": {
+    "n": 1220,
+    "mean": 45.8,
+    "sd": 12.02,
+    "median": 47.0,
+    "q1": 37.0,
+    "q3": 54.25,
+    "min": 18.0,
+    "max": 78.0
+   },
+   "Dem_BMI": {
+    "n": 1220,
+    "mean": 22.52,
+    "sd": 2.74,
+    "median": 22.3,
+    "q1": 20.8,
+    "q3": 24.1,
+    "min": 16.0,
+    "max": 34.6
+   }
+  },
+  "sex": {
+   "Female": {
+    "n": 676,
+    "pct": 55.4
+   },
+   "Male": {
+    "n": 544,
+    "pct": 44.6
+   }
+  },
+  "education": {
+   "Below primary school": {
+    "n": 25,
+    "pct": 2.0
+   },
+   "Primary school": {
+    "n": 83,
+    "pct": 6.8
+   },
+   "Lower secondary school": {
+    "n": 272,
+    "pct": 22.3
+   },
+   "High school": {
+    "n": 392,
+    "pct": 32.1
+   },
+   "College or university": {
+    "n": 410,
+    "pct": 33.6
+   },
+   "Postgraduate": {
+    "n": 38,
+    "pct": 3.1
+   }
+  },
+  "smoking": {
+   "Current_smoker": {
+    "n": 179,
+    "pct": 14.7
+   },
+   "Former_smoker": {
+    "n": 98,
+    "pct": 8.0
+   },
+   "Non_smoker": {
+    "n": 943,
+    "pct": 77.3
+   }
+  },
+  "h_pylori": {
+   "Eradicated": {
+    "n": 260,
+    "pct": 21.3
+   },
+   "Negative": {
+    "n": 817,
+    "pct": 67.0
+   },
+   "Positive_untreated": {
+    "n": 5,
+    "pct": 0.4
+   },
+   "Treated_unconfirmed": {
+    "n": 138,
+    "pct": 11.3
+   }
+  },
+  "bmi_who_asia_pacific": {
+   "<18.5": {
+    "n": 64,
+    "pct": 5.2
+   },
+   "18.5-22.9": {
+    "n": 671,
+    "pct": 55.0
+   },
+   "23.0-24.9": {
+    "n": 281,
+    "pct": 23.0
+   },
+   ">=25": {
+    "n": 204,
+    "pct": 16.7
+   }
+  },
+  "comorbidities": {
+   "Hypertension": {
+    "n": 224,
+    "pct": 18.4
+   },
+   "Diabetes": {
+    "n": 83,
+    "pct": 6.8
+   },
+   "Dyslipidemia": {
+    "n": 199,
+    "pct": 16.3
+   },
+   "CAD": {
+    "n": 17,
+    "pct": 1.4
+   }
+  },
+  "endoscopic_atrophy_context": {
+   "No atrophy": {
+    "n": 602,
+    "pct": 49.3
+   },
+   "Atrophy": {
+    "n": 618,
+    "pct": 50.7
+   }
+  },
+  "codebook_note": "Sex: 0 female, 1 male. Education coded 1 to 6 as labelled.",
+  "tongue_signs_reference_standard": {
+   "Tongue_Swollen": {
+    "kind": "binary",
+    "n_rated": 1220,
+    "n_positive": 509,
+    "prevalence_pct": 41.7
+   },
+   "Coating_Peeled": {
+    "kind": "binary",
+    "n_rated": 1220,
+    "n_positive": 40,
+    "prevalence_pct": 3.3
+   },
+   "Coating_Rotten": {
+    "kind": "binary",
+    "n_rated": 1220,
+    "n_positive": 134,
+    "prevalence_pct": 11.0
+   },
+   "Coating_Greasy": {
+    "kind": "binary",
+    "n_rated": 1220,
+    "n_positive": 482,
+    "prevalence_pct": 39.5
+   },
+   "Tongue_Scalloped": {
+    "kind": "binary",
+    "n_rated": 1220,
+    "n_positive": 817,
+    "prevalence_pct": 67.0
+   },
+   "Tongue_Cracked": {
+    "kind": "binary",
+    "n_rated": 1220,
+    "n_positive": 605,
+    "prevalence_pct": 49.6
+   },
+   "Tongue_Prickly": {
+    "kind": "binary",
+    "n_rated": 1220,
+    "n_positive": 208,
+    "prevalence_pct": 17.0
+   },
+   "Tongue_Stasis_Spots": {
+    "kind": "binary",
+    "n_rated": 1220,
+    "n_positive": 172,
+    "prevalence_pct": 14.1
+   },
+   "Tongue_Sublingual_Veins": {
+    "kind": "binary",
+    "n_rated": 1217,
+    "n_positive": 497,
+    "prevalence_pct": 40.8,
+    "excluded_no_source": 3
+   },
+   "Tongue_Color": {
+    "kind": "multiclass",
+    "n_rated": 1220,
+    "missing": 0,
+    "levels": {
+     "Pale": {
+      "n": 258,
+      "pct": 21.1
+     },
+     "Pale_red": {
+      "n": 520,
+      "pct": 42.6
+     },
+     "Red": {
+      "n": 289,
+      "pct": 23.7
+     },
+     "Bluish_purple": {
+      "n": 153,
+      "pct": 12.5
+     }
+    }
+   },
+   "Tongue_Shape": {
+    "kind": "multiclass",
+    "n_rated": 1220,
+    "missing": 0,
+    "levels": {
+     "Thin": {
+      "n": 207,
+      "pct": 17.0
+     },
+     "Normal": {
+      "n": 644,
+      "pct": 52.8
+     },
+     "Enlarged": {
+      "n": 369,
+      "pct": 30.2
+     }
+    }
+   },
+   "Tongue_Moisture": {
+    "kind": "multiclass",
+    "n_rated": 1220,
+    "missing": 0,
+    "levels": {
+     "Dry": {
+      "n": 159,
+      "pct": 13.0
+     },
+     "Moist": {
+      "n": 793,
+      "pct": 65.0
+     },
+     "Wet": {
+      "n": 268,
+      "pct": 22.0
+     }
+    }
+   },
+   "Coating_Color": {
+    "kind": "multiclass",
+    "n_rated": 1192,
+    "missing": 28,
+    "levels": {
+     "White": {
+      "n": 671,
+      "pct": 56.3
+     },
+     "White_yellow": {
+      "n": 338,
+      "pct": 28.4
+     },
+     "Yellow": {
+      "n": 119,
+      "pct": 10.0
+     },
+     "Grayish_black": {
+      "n": 64,
+      "pct": 5.4
+     }
+    }
+   },
+   "Coating_Thickness": {
+    "kind": "multiclass",
+    "n_rated": 1193,
+    "missing": 27,
+    "levels": {
+     "Thin": {
+      "n": 457,
+      "pct": 38.3
+     },
+     "Thick": {
+      "n": 736,
+      "pct": 61.7
+     }
+    }
+   },
+   "Tongue_Movement": {
+    "kind": "multiclass",
+    "n_rated": 1217,
+    "missing": 3,
+    "levels": {
+     "Flexible": {
+      "n": 841,
+      "pct": 69.1
+     },
+     "Trembling": {
+      "n": 221,
+      "pct": 18.2
+     },
+     "Flaccid": {
+      "n": 135,
+      "pct": 11.1
+     },
+     "Stiff": {
+      "n": 20,
+      "pct": 1.6
+     }
+    }
+   }
+  }
+ },
+ "acquisition": {
+  "device": "Apple iPhone 11 Pro Max",
+  "images_with_that_device": 3634,
+  "images_without_exif_model": 41
+ },
+ "sign_shortcut_audit": {
+  "n_photographs": 2440,
+  "n_patients": 1220,
+  "method": "random forest (300 trees), patient-grouped 5-fold CV, out-of-fold AUC (one-vs-rest macro for multi-level signs)",
+  "signs": {
+   "Tongue_Color": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.54,
+    "exif_auc": 0.519,
+    "image_border_auc": 0.586
+   },
+   "Tongue_Shape": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.562,
+    "exif_auc": 0.565,
+    "image_border_auc": 0.506
+   },
+   "Tongue_Moisture": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.511,
+    "exif_auc": 0.534,
+    "image_border_auc": 0.482
+   },
+   "Coating_Color": {
+    "n_photographs": 2384,
+    "file_metadata_auc": 0.524,
+    "exif_auc": 0.504,
+    "image_border_auc": 0.493
+   },
+   "Coating_Thickness": {
+    "n_photographs": 2386,
+    "file_metadata_auc": 0.51,
+    "exif_auc": 0.537,
+    "image_border_auc": 0.518
+   },
+   "Tongue_Swollen": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.535,
+    "exif_auc": 0.532,
+    "image_border_auc": 0.473
+   },
+   "Coating_Peeled": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.537,
+    "exif_auc": 0.543,
+    "image_border_auc": 0.488
+   },
+   "Coating_Rotten": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.524,
+    "exif_auc": 0.508,
+    "image_border_auc": 0.537
+   },
+   "Coating_Greasy": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.489,
+    "exif_auc": 0.449,
+    "image_border_auc": 0.523
+   },
+   "Tongue_Scalloped": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.537,
+    "exif_auc": 0.571,
+    "image_border_auc": 0.524
+   },
+   "Tongue_Cracked": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.542,
+    "exif_auc": 0.485,
+    "image_border_auc": 0.571
+   },
+   "Tongue_Prickly": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.543,
+    "exif_auc": 0.523,
+    "image_border_auc": 0.509
+   },
+   "Tongue_Stasis_Spots": {
+    "n_photographs": 2440,
+    "file_metadata_auc": 0.556,
+    "exif_auc": 0.535,
+    "image_border_auc": 0.552
+   }
+  },
+  "median_file_metadata_auc": 0.537,
+  "max_file_metadata_auc": 0.562,
+  "median_exif_auc": 0.532,
+  "max_exif_auc": 0.571,
+  "median_image_border_auc": 0.518,
+  "max_image_border_auc": 0.586
+ }
+}

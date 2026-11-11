@@ -1,0 +1,18 @@
+# Patient data must never enter this repository.
+Data.csv
+*.HEIC
+*.heic
+*.MOV
+*.mov
+*.jpg
+*.jpeg
+png_512/
+images/
+manifest.csv
+splits_p3_final.csv
+
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+.venv/

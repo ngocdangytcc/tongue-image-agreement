@@ -1,0 +1,11 @@
+# Figure reproduction (no GPU, no images required).
+matplotlib==3.9.2
+numpy==2.1.3
+pandas==2.2.3
+
+# Training and evaluation — see results/results.json for the exact run environment.
+# torch==2.11.0+cu128   (install from the PyTorch index matching your CUDA version)
+# timm==1.0.29
+# scikit-learn==1.6.1
+# pillow==11.0.0
+# pillow-heif==0.18.0
