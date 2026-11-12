@@ -1,5 +1,5 @@
 {
- "about": "Public results file for: Tang HK, Vo TT, Tran DN. Agreement between a deep-learning reader of smartphone tongue photographs and a five-expert traditional-medicine panel. Diagnostics (submitted). No patient-level data, identifiers or photographs.",
+ "about": "Public results file for: Tang HK, Vo TT, Tran DN. Agreement between a deep-learning reader of smartphone tongue photographs and a five-expert traditional-medicine panel. No patient-level data, identifiers or photographs.",
  "n_patients_evaluated": 1220,
  "cohort": {
   "patients_photographed": 1226,
@@ -13,10 +13,10 @@
   "training_note": "Models trained on all 1,226 patients under patient-grouped 5-fold CV; the six pilot patients are excluded from evaluation only. Their photographs were in the training folds of the other four folds."
  },
  "rating": {
-  "panel": "five traditional-medicine physicians, majority vote",
+  "panel": "five traditional-medicine physicians, majority vote; consensus discussion when no level had a majority (e.g. 2-2-1)",
   "experience": "mean 10.8 years (range 7 to 14)",
   "standardisation_meeting_ict": "2025-01-06",
-  "modality": "Tongue signs rated from the tongue photographs; tongue movement rated from the tongue video. The model received only the two dorsal photographs."
+  "modality": "13 tongue signs rated from the dorsal photographs; distended sublingual veins from the sublingual photograph; tongue movement from the tongue video. Panel blinded to the endoscopic findings. The model received only the two dorsal photographs."
  },
  "model": {
   "backbone": "efficientnet_b0",
@@ -1577,7 +1577,7 @@
   "source": "Jacobson E et al., J Altern Complement Med 2019;25(11):1085-96",
   "pmid": "31730402",
   "doi": "10.1089/acm.2019.0197",
-  "design": "systematic review of 21 studies; Cohen's kappa reported in 7 (mean 0.34, median 0.34, range 0.07 to 0.59); 14 of 21 assessed TCM diagnoses and 2 assessed diagnostic signs; raters examined subjects in person (PubMed abstract, PMID 31730402, checked 11 Nov 2026)",
+  "design": "systematic review of 21 studies; Cohen's kappa reported in 7 (mean 0.34, median 0.34, range 0.07 to 0.59); 14 of 21 assessed TCM diagnoses and 2 assessed diagnostic signs; raters examined subjects in person",
   "median_kappa": 0.34,
   "range": [
    0.07,
